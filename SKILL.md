@@ -139,7 +139,11 @@ agent_created: true
 - **位置**：用户指定路径，或当前工作目录
 - **格式**：单文件，所有 CSS/JS 内联，无外部依赖（字体可用 Google Fonts CDN）
 
-输出后，调用 `present_files` 工具（传入生成的 HTML 文件路径）在内置浏览器中预览。
+> ⚠️ **离线/内网注意**：字体用 Google Fonts CDN，离线或内网环境会加载失败。请保留字体栈里的系统兜底（`-apple-system`、`'PingFang SC'` 等），离线场景改用本地字体。
+
+> ⚠️ **移动端自适应**：模板固定 `1280×720`，手机上会溢出被裁掉。建议在 `.presentation` 外层加一个按视口缩放的容器：`transform: scale(calc(100vw / 1280))` + `transform-origin: top left`，或用 JS 按 `window.innerWidth / 1280` 计算缩放系数。
+
+输出后，把生成的 HTML 文件**交给用户预览**（用当前环境对应的交付工具，例如 `dsh_im_return_file` / `present_files`）。文件是单文件、可离线打开，也可直接丢进 GitHub Pages 托管展示。
 
 ### Step 5：迭代优化
 
@@ -162,6 +166,17 @@ agent_created: true
 5. **字重要有层次** — 大标题 700–800，副标题 300–400，正文 400
 6. **光晕装饰要克制** — 透明度 0.15–0.25，不超过 3 个光晕/页
 7. **所有间距成倍数** — 使用 8px 网格（8, 16, 24, 32, 40, 48, 60, 80px）
+
+---
+
+## 与本博客放映器集成（可选）
+
+如果你要把产出的演示放进 `onlyforchris` 的博客（GitHub Pages），博客已内置一套放映器：
+
+- **直接用**：把这份单文件 HTML 作为静态页放进博客仓库（无 frontmatter 的 `.html` 会被原样托管），再链接访问即可（可参考博客里的 `/apple-demo.html`）。
+- **复用博客放映器**：博客提供 `layout: slideshow` + 可选 `style: apple` 主题。把每个 `<div class="slide">` 迁移成 `<section class="slide">`，并加上对应的背景类（`slide-hero`/`gradient`/`stats`/`white`），即可用博客的目录跳页、全屏、自动播放、明暗切换，且自动汇总到 `/slideshows/` 目录。苹果风的大字号、渐变文字、特性卡片等 class 在博客里也已支持。
+
+> 一句话：想"完整还原苹果风"就托管独立 HTML；想"和其它演示统一、进目录"就迁移到博客的 `style: apple`。
 
 ---
 
